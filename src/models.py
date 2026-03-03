@@ -16,6 +16,14 @@ class User(db.Model):
 
     favorites = db.relationship("Favorite", backref="user", lazy=True)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "first_name": self.first_name,
+            "last_name": self.last_name
+        }
+
 
 # ---------------- PLANET ----------------
 class Planet(db.Model):
@@ -28,6 +36,15 @@ class Planet(db.Model):
     climate = db.Column(db.String(120))
 
     residents = db.relationship("Character", backref="homeworld", lazy=True)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "population": self.population,
+            "terrain": self.terrain,
+            "climate": self.climate
+        }
 
 
 # ---------------- CHARACTER ----------------
@@ -42,6 +59,16 @@ class Character(db.Model):
 
     homeworld_id = db.Column(db.Integer, db.ForeignKey("planet.id"))
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "height": self.height,
+            "mass": self.mass,
+            "gender": self.gender,
+            "homeworld_id": self.homeworld_id
+        }
+
 
 # ---------------- FAVORITE ----------------
 class Favorite(db.Model):
@@ -52,3 +79,11 @@ class Favorite(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     planet_id = db.Column(db.Integer, db.ForeignKey("planet.id"))
     character_id = db.Column(db.Integer, db.ForeignKey("character.id"))
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "planet_id": self.planet_id,
+            "character_id": self.character_id
+        }
