@@ -56,7 +56,7 @@ class Character(db.Model):
     height = db.Column(db.String(50))
     mass = db.Column(db.String(50))
     gender = db.Column(db.String(50))
-    hair_color = db.Column(db.String(50))  # ✅ AGREGADO
+    hair_color = db.Column(db.String(50))  
 
     homeworld_id = db.Column(db.Integer, db.ForeignKey("planet.id"))
 
@@ -67,7 +67,7 @@ class Character(db.Model):
             "height": self.height,
             "mass": self.mass,
             "gender": self.gender,
-            "hair_color": self.hair_color,  # ✅ AGREGADO
+            "hair_color": self.hair_color,  
             "homeworld_id": self.homeworld_id
         }
 
@@ -78,7 +78,7 @@ class Favorite(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKEey("user.id"), nullable=False)
     planet_id = db.Column(db.Integer, db.ForeignKey("planet.id"))
     character_id = db.Column(db.Integer, db.ForeignKey("character.id"))
 
