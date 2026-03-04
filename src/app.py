@@ -13,13 +13,14 @@ from models import db, User, Planet, Character, Favorite
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+# ✅ Mejor configuración SQLite local
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url.replace(
         "postgres://", "postgresql://"
     )
 else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/test.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -29,13 +30,13 @@ CORS(app)
 setup_admin(app)
 
 
-# Handle errors as JSON
+# ---------------- ERROR HANDLER ----------------
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 
-# Sitemap
+# ---------------- SITEMAP ----------------
 @app.route("/")
 def sitemap():
     return generate_sitemap(app)
@@ -72,7 +73,10 @@ def create_person():
     new_character = Character(
         name=body["name"],
         gender=body.get("gender"),
+        height=body.get("height"),
+        mass=body.get("mass"),
         hair_color=body.get("hair_color"),
+        homeworld_id=body.get("homeworld_id")
     )
 
     db.session.add(new_character)
@@ -99,8 +103,17 @@ def update_person(person_id):
     if "gender" in body:
         person.gender = body["gender"]
 
+    if "height" in body:
+        person.height = body["height"]
+
+    if "mass" in body:
+        person.mass = body["mass"]
+
     if "hair_color" in body:
         person.hair_color = body["hair_color"]
+
+    if "homeworld_id" in body:
+        person.homeworld_id = body["homeworld_id"]
 
     db.session.commit()
 
@@ -211,4 +224,4 @@ def delete_favorite_planet(planet_id):
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 3000))
-    app.run(host="0.0.0.0", port=PORT, debug=False)
+    app.run(host="0.0.0.0", port=PORT, debug=True)

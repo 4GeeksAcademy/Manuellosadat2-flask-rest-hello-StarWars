@@ -56,6 +56,7 @@ class Character(db.Model):
     height = db.Column(db.String(50))
     mass = db.Column(db.String(50))
     gender = db.Column(db.String(50))
+    hair_color = db.Column(db.String(50))  # ✅ AGREGADO
 
     homeworld_id = db.Column(db.Integer, db.ForeignKey("planet.id"))
 
@@ -66,6 +67,7 @@ class Character(db.Model):
             "height": self.height,
             "mass": self.mass,
             "gender": self.gender,
+            "hair_color": self.hair_color,  # ✅ AGREGADO
             "homeworld_id": self.homeworld_id
         }
 
